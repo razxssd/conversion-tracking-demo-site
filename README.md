@@ -1,73 +1,64 @@
-# React + TypeScript + Vite
+# Conversion Tracking Demo Site
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A demo e-commerce site for testing the Rebrandly Conversion Tracking API and SDK. It simulates a simple online store where every user interaction (page views, purchases, signups) is tracked via the SDK, with a built-in debug panel to inspect events in real time.
 
-Currently, two official plugins are available:
+> **Note:** This site is currently configured to use the **test environment** APIs and SDK (`tracking.api.test.rebrandly.com` / `custom.test.rebrandly.com`). See the [Environment variables](#environment-variables) section to configure it.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **Product catalog** — Browse and view product detail pages, triggering `page_view` events on navigation
+- **Purchase flow** — "Buy Now" triggers a `purchase` event with order ID, product info, price and currency
+- **Signup form** — Mock registration that fires a `signup` event
+- **Deduplication testing** — "Buy Again (Fixed Order ID)" button and repeated email signup to verify dedup behavior
+- **Debug panel** — Side panel with tabs for:
+  - **Events** — Live log of all tracked events with status, duration, and expandable payload details
+  - **Dedup** — Deduplication cache stats and per-event breakdown
+  - **Queue** — Queued events and processor status
+  - **Config** — Current SDK configuration, environment variables, and localStorage state
+  - **Actions** — Utility actions (set test click ID, clear dedup cache, clear/process queue, trigger domain verification)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the ESLint configuration
+- React 19, TypeScript, Vite 7
+- Tailwind CSS 4
+- React Router 7
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js (v18+)
+- npm
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Installation
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Environment variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Copy the example file and fill in your values:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cp .env.example .env
+```
+
+| Variable | Description |
+|---|---|
+| `VITE_SDK_URL` | URL to the `rbly.js` SDK bundle. Use `/sdk/rbly.js` for local dev (served by Vite from the SDK project) or a full URL for test/production |
+| `VITE_API_BASE` | Conversion Tracking API base URL (e.g. `http://localhost:3000` or `https://tracking.api.test.rebrandly.com`) |
+| `VITE_API_KEY` | Rebrandly API key for SDK initialization |
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+npm run preview  # preview the production build locally
 ```

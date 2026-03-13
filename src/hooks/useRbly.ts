@@ -119,7 +119,8 @@ export function useRbly(): UseRblyReturn {
         return
       }
 
-      const apiKey = import.meta.env.VITE_API_KEY
+      const params = new URLSearchParams(window.location.search)
+      const apiKey = params.get('apiKey') || import.meta.env.VITE_API_KEY
       const apiBase = import.meta.env.VITE_API_BASE || 'http://localhost:3000'
 
       if (!apiKey) {

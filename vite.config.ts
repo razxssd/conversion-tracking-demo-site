@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   const apiKey = env.VITE_API_KEY || ''
 
   return {
-    base: './',
+    base: mode === 'production' ? '/conversion-tracking-demo-site/' : '/',
     plugins: [
       react(),
       tailwindcss(),
